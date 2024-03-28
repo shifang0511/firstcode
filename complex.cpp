@@ -6,81 +6,62 @@ using namespace std;
 class Complex
 {
 private:
-	double x; double y;
+	double real; double imag;
 public:
-	Complex(double a, double b) :x(a), y(b) {};
-	Complex add(double a, double b)
+	Complex(double a, double b) :real(a), imag(b) {};
+    Complex(Complex &c):real(c.real),imag(c.imag){};
+    friend istream& operator>>(istream& is, Complex& c);
+    friend ostream& operator<<(ostream& os, const Complex& c);
+	Complex operator +(const Complex &cp)
 	{
-		x += a;
-		y += b;
-		return *this;
+		return Complex(real+cp.real, imag+cp.imag);
 	}
-	Complex sub(double a, double b)
+	Complex operator -(const Complex &cp)
 	{
-		x -= a;
-		y -= b;
-		return *this;
+		return Complex(real-cp.real, imag-cp.imag);
 	}
-	Complex mul(double a, double b)
+	Complex operator *(Complex cp)
 	{
-		double c = a * x - b * y;
-		double d = x * b + y * a;
-		x = c; y = d;
-		return *this;
+		double c = cp.real * real - cp.imag * imag;
+		double d = real * cp.imag + imag * cp.real;
+		return Complex(c, d);
 	}
 
-	Complex div(double a, double b)
+	Complex operator /(Complex cp)
 	{
-		double real = (a * x + b * y)/(a*a+b*b);
-		double img = ( y * a - x * b) / (a * a + b * b);
-		x = real; y = img;
-		return *this;
+		double c = (cp.real * real + cp.imag * imag)/(cp.real*cp.real+cp.imag*cp.imag);
+		double d = ( imag * cp.real - real * cp.imag) / (cp.real * cp.real + cp.imag * cp.imag);
+		return Complex(c, d);
 	}
-	void print()
-	{
-		cout <<fixed<<setprecision(2)<< "(" << this->x << "," << this->y << ")" << endl;
-	}
+    Complex &operator=(const Complex &c){
+        real=c.real;
+        imag=c.imag;
+        return *this;
+    }
+
 };
-vector<string> split(const string& str, const string& pattern)
-{
-	vector<string> res;
-	if (str == "")
-		return res;
-	string strs = str + pattern;
-	size_t pos = strs.find(pattern);
-
-	while (pos != strs.npos)
-	{
-		string temp = strs.substr(0, pos);
-		res.push_back(temp);
-		strs = strs.substr(pos + 1, strs.size());
-		pos = strs.find(pattern);
-	}
-	return res;
+istream& operator>>(istream& is, Complex& c) {
+    is >> c.real >> c.imag;
+    return is;
+}
+ostream& operator<<(ostream& os, const Complex& c) {
+    os << c.real << (c.imag >= 0 ? "+" : "") << c.imag << "i";
+    return os;
 }
 int main()
 {
-	string command;
-	double a, b;
-	cin >> command;
-	vector<string> v = split(command,",");
-	Complex com(stod(v[0]), stod(v[1]));
-	while (cin >> command)
-	{
-		vector<string> v = split(command, ",");
-		if (v[0] == "add") { 
-			com.add(stod(v[1]), stod(v[2])); 
-		}
-		if (v[0] == "sub") {
-			com.sub(stod(v[1]), stod(v[2]));
-		}
-		if (v[0] == "mul") {
-			com.mul(stod(v[1]), stod(v[2]));
-		}
-		if (v[0] == "div") {
-			com.div(stod(v[1]), stod(v[2]));
-		}
-	}
-	com.print();
+    Complex c1(2.5, 3.7);
+    Complex c2(1.8, -2.4);
+    Complex c3 = c1 + c2;
+    Complex c4 = c1 - c2;
+    Complex c5 = c1 * c2;
+    Complex c6 = c1 / c2;
+
+    cout << "c1: " << c1 << endl;
+    cout << "c2: " << c2 << endl;
+    cout << "c1 + c2: " << c3 << endl;
+    cout << "c1 - c2: " << c4 << endl;
+    cout << "c1 * c2: " << c5 << endl;
+    cout << "c1 / c2: " << c6 << endl;
 	return 0;
 }

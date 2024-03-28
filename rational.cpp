@@ -20,6 +20,7 @@ private:
 public:
 	friend int gcd(int a, int b);
 	Rational(int a, int b) :x(a), y(b) {};
+	Rational(Rational &c) :x(c.x), y(c.y) {};
 	Rational add(int a, int b)
 	{
 		int num=x*b+a*y;

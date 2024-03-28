@@ -13,15 +13,29 @@ public:
     friend double operator*(Vector &, Vector &);
     friend ostream &operator<<(ostream &output, Vector &);
     friend istream &operator>>(istream &input, Vector &);
-    Vector(int size):len(size){};
+    Vector(int size):len(size){
+        v=new double[len];
+    };
     Vector(double * array, int size):v(array),len(size){};
+    Vector(Vector &v1):len(v1.len){
+        v=new double[len];
+        for(int i=0;i<len;i++)v[i]=v1[i];
+    };
     ~Vector(){
         delete []v;
     };
     double &operator[](int i){return this->v[i];};
-    Vector &operator=(Vector &);   
-};
-Vector operator+(Vector & v1, Vector &v2){   
+    const double &operator[](int i)const{return this->v[i];};
+    Vector &operator =(const Vector& v1){
+        if(this==&v1)return *this;
+        delete []v;
+        len=v1.len;
+        v=new double[len];
+        for(int i=0;i<len;i++)v[i]=v1[i];
+        return *this;
+    }   
+}; 
+Vector operator+(Vector& v1, Vector &v2){   
     double a[v1.len];
     for(int i=0;i<v1.len;i++)a[i]=v1[i]+v2[i];
     Vector v3(a,v2.len);
@@ -51,4 +65,15 @@ istream &operator >>(istream &input,Vector &v)
 }
 int main()
 {
+    double a[]={1,2,3};
+    double b[]={4,5,6};
+    Vector v1(a,3),v2(b,3),v3(3);
+    cout<<v1<<endl;
+    cout<<v2<<endl;
+    v3=v1+v2;
+    cout<<v3<<endl;
+    v3=v1-v2;
+    cout<<v3<<endl;
+    cout<<v1*v2<<endl;
+    return 0;
 }
