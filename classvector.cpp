@@ -16,13 +16,16 @@ public:
     Vector(int size):len(size){
         v=new double[len];
     };
-    Vector(double * array, int size):v(array),len(size){};
+    Vector(double * array, int size):len(size){
+        v=new double[len];
+        for(int i=0;i<len;i++)v[i]=array[i];
+    };
     Vector(Vector &v1):len(v1.len){
         v=new double[len];
         for(int i=0;i<len;i++)v[i]=v1[i];
     };
     ~Vector(){
-        delete []v;
+        delete v;
     };
     double &operator[](int i){return this->v[i];};
     const double &operator[](int i)const{return this->v[i];};

@@ -9,17 +9,17 @@ private:
 	double real; double imag;
 public:
 	Complex(double a, double b) :real(a), imag(b) {};
-    Complex(Complex &c):real(c.real),imag(c.imag){};
+    Complex(const Complex &c):real(c.real),imag(c.imag){};
     friend istream& operator>>(istream& is, Complex& c);
     friend ostream& operator<<(ostream& os, const Complex& c);
-	Complex operator +(const Complex &cp)
-	{
-		return Complex(real+cp.real, imag+cp.imag);
-	}
-	Complex operator -(const Complex &cp)
-	{
-		return Complex(real-cp.real, imag-cp.imag);
-	}
+    Complex operator +(const Complex &cp)
+    {
+        return Complex(real+cp.real, imag+cp.imag);
+    }
+    Complex operator -(const Complex &cp)
+    {
+        return Complex(real-cp.real, imag-cp.imag);
+    }
 	Complex operator *(Complex cp)
 	{
 		double c = cp.real * real - cp.imag * imag;
@@ -33,7 +33,7 @@ public:
 		double d = ( imag * cp.real - real * cp.imag) / (cp.real * cp.real + cp.imag * cp.imag);
 		return Complex(c, d);
 	}
-    Complex &operator=(const Complex &c){
+    Complex &operator=(const Complex& c){
         real=c.real;
         imag=c.imag;
         return *this;
@@ -63,5 +63,6 @@ int main()
     cout << "c1 - c2: " << c4 << endl;
     cout << "c1 * c2: " << c5 << endl;
     cout << "c1 / c2: " << c6 << endl;
+    system("pause");
 	return 0;
 }
